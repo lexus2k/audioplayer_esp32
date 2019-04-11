@@ -27,6 +27,7 @@ extern "C" int vgm_play_start(const uint8_t *data, int size);
 extern "C" int vgm_play_data(void *outBuffer, int size);
 extern "C" int vgm_play_stop(void);
 extern "C" int vgm_set_format(uint32_t frequency);
+extern "C" int vgm_set_volume(float volume);
 
 AudioVgmDecoder::~AudioVgmDecoder()
 {
@@ -44,6 +45,7 @@ void AudioVgmDecoder::set_melody( const uint8_t *buffer, int size )
         vgm_play_stop();
         m_started = false;
     }
+    vgm_set_volume( 2.5f );
     vgm_set_format(m_rate);
     vgm_play_start(buffer, size);
     m_started = true;
