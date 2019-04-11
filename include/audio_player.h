@@ -30,7 +30,7 @@ class AudioPlayer
 {
 public:
     AudioPlayer(uint32_t frequency = 16000);
-    ~AudioPlayer() = default;
+    ~AudioPlayer();
 
     void play(const NixieMelody* melody);
     void play_vgm(const uint8_t *buffer, int size);
@@ -53,6 +53,7 @@ private:
     uint8_t* m_write_pos = nullptr;
     uint8_t* m_player_pos = nullptr;
     int m_size;
+    SemaphoreHandle_t m_mutex;
 
     int reset_player();
     int decode_data();

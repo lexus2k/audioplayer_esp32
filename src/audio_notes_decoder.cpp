@@ -48,7 +48,7 @@ int AudioNotesDecoder::decode(uint8_t* origin_buffer, int max_size)
         return -1;
     }
     uint8_t* buffer = origin_buffer;
-    int remaining = 2048;
+    int remaining = max_size;
     while ( remaining > 0 )
     {
         if ( !m_note_samples_left && !m_pause_left )
