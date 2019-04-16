@@ -23,11 +23,7 @@
 
 #ifdef USE_VGM_DECODER
 
-extern "C" int vgm_play_start(const uint8_t *data, int size);
-extern "C" int vgm_play_data(void *outBuffer, int size);
-extern "C" int vgm_play_stop(void);
-extern "C" int vgm_set_format(uint32_t frequency);
-extern "C" int vgm_set_volume(float volume);
+#include "esp32_vgmplay.h"
 
 AudioVgmDecoder::~AudioVgmDecoder()
 {
