@@ -1440,36 +1440,42 @@ const SNixieSamplingNote monkeyIslandP [] =
 
 const NixieMelody  melodyMario = {
     .notes = (const uint8_t*)marioNotes,
+    .data_len = sizeof(marioNotes),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
 };
 
 const NixieMelody  melodyMario2 = {
     .notes = (const uint8_t*)marioNotes2,
+    .data_len = sizeof(marioNotes2),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 50,
 };
 
 const NixieMelody  melodyMarioUnderground = {
     .notes = (const uint8_t*)underworld_notes,
+    .data_len = sizeof(underworld_notes),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
 };
 
 const NixieMelody  melodyStarwars = {
     .notes = (const uint8_t*)imperialMarch,
+    .data_len = sizeof(imperialMarch),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
 };
 
 const NixieMelody  melodyMonkeyIsland = {
     .notes = (const uint8_t*)monkeyIsland,
+    .data_len = sizeof(monkeyIsland),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 10,
 };
 
 const NixieMelody  melodyMonkeyIslandP = {
     .notes = (const uint8_t*)monkeyIslandP,
+    .data_len = sizeof(monkeyIslandP),
     .type = MELODY_TYPE_PROGMEM_SAMPLING,
     .pause = -3, // negative value means that pause = note_duration * Value / 32
 };
@@ -1481,9 +1487,10 @@ const SNixieTempoNote cancelNotes[] = {
 };
 
 const NixieMelody soundCancel = {
-     .notes = (const uint8_t *)cancelNotes,
-     .type = MELODY_TYPE_PROGMEM_TEMPO,
-     .pause = 30,
+    .notes = (const uint8_t *)cancelNotes,
+    .data_len = sizeof(cancelNotes),
+    .type = MELODY_TYPE_PROGMEM_TEMPO,
+    .pause = 30,
 };
 
 const SNixieSamplingNote clickNotes[] = {
@@ -1492,9 +1499,10 @@ const SNixieSamplingNote clickNotes[] = {
 };
 
 const NixieMelody soundClick = {
-     .notes = (const uint8_t *)clickNotes,
-     .type = MELODY_TYPE_PROGMEM_SAMPLING,
-     .pause = 30,
+    .notes = (const uint8_t *)clickNotes,
+    .data_len = sizeof(clickNotes),
+    .type = MELODY_TYPE_PROGMEM_SAMPLING,
+    .pause = 30,
 };
 
 const SNixieTempoNote okNotes[] = {
@@ -1503,9 +1511,10 @@ const SNixieTempoNote okNotes[] = {
 };
 
 const NixieMelody soundOk = {
-     .notes = (const uint8_t *)okNotes,
-     .type = MELODY_TYPE_PROGMEM_TEMPO,
-     .pause = 30,
+    .notes = (const uint8_t *)okNotes,
+    .data_len = sizeof(okNotes),
+    .type = MELODY_TYPE_PROGMEM_TEMPO,
+    .pause = 30,
 };
 
 
@@ -1522,13 +1531,15 @@ const SNixieSamplingNote doorBellNotes[] = {
 };
 
 const NixieMelody doorBell = {
-     .notes = (const uint8_t *)doorBellNotes,
-     .type = MELODY_TYPE_PROGMEM_SAMPLING,
-     .pause = 5,
+    .notes = (const uint8_t *)doorBellNotes,
+    .data_len = sizeof(doorBellNotes),
+    .type = MELODY_TYPE_PROGMEM_SAMPLING,
+    .pause = 5,
 };
 
 const NixieMelody soundClock = {
-     .notes = (const uint8_t *)timeChange1,
-     .type  = MELODY_TYPE_PROGMEM_TEMPO,
-     .pause = 30,
+    .notes = (const uint8_t *)timeChange1,
+    .data_len = sizeof(timeChange1),
+    .type  = MELODY_TYPE_PROGMEM_TEMPO,
+    .pause = 30,
 };

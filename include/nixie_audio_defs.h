@@ -166,6 +166,7 @@ typedef enum
     MELODY_TYPE_PROGMEM_SAMPLING,
     MELODY_TYPE_TEMPO_NOTE,
     MELODY_TYPE_SAMPLING_NOTE,
+    MELODY_TYPE_VGM,
 } EMelodyType;
 
 typedef struct
@@ -176,12 +177,21 @@ typedef struct
      */
     const uint8_t *notes;
     /**
+     * Data length in bytes
+     */
+    int data_len;
+    /**
      * Defines type of Nixie notes
      */
     EMelodyType    type;
-    /** pause in milliseconds between playing notes
-     *  or if negative - defines pause between note in % of note duration (in 1/32 units).
+    /**
+     * pause in milliseconds between playing notes
+     * or if negative - defines pause between note in % of note duration (in 1/32 units).
      */
     int16_t        pause;
+    /**
+     * Melody name optional. Can be null
+     */
+    const char    *name;
 } NixieMelody;
 
