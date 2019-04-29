@@ -18,13 +18,20 @@
 
 #pragma once
 
-#include "audio_notes_decoder.h"
-
+#include "nixie_audio_defs.h"
+#include "audio_decoder.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "driver/i2s.h"
+#include "freertos/semphr.h"
 #include <stdint.h>
 #include <string.h>
+
+enum class EAudioChannels: uint8_t
+{
+    LEFT_ONLY = 0x01,
+    RIGHT_ONLY = 0x02,
+    BOTH = 0x01 | 0x02,
+};
 
 class AudioPlayer
 {
@@ -35,7 +42,7 @@ public:
     void play(const NixieMelody* melody);
     void play_vgm(const NixieMelody *melody);
     void play_vgm(const uint8_t *buffer, int size);
-    void begin();
+    void begin(EAudioChannels channels = EAudioChannels::BOTH);
     void end();
     void set_on_play_complete( void (*cb)() = nullptr ) { m_on_play_complete = cb; }
     /**

@@ -17,6 +17,7 @@
 */
 
 #include "audio_player.h"
+#include "audio_notes_decoder.h"
 #ifdef USE_GME_DECODER
 #include "audio_gme_decoder.h"
 #elif defined(USE_VGM_DECODER)
@@ -65,14 +66,16 @@ AudioPlayer::~AudioPlayer()
     vSemaphoreDelete(m_mutex);
 }
 
-void AudioPlayer::begin()
+void AudioPlayer::begin(EAudioChannels channels)
 {
     xSemaphoreTake( m_mutex, portMAX_DELAY );
     i2s_config_t i2s_config{};
     i2s_config.mode = static_cast<i2s_mode_t>(I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN);
     i2s_config.sample_rate = m_frequency;
     i2s_config.bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT;
-    i2s_config.channel_format = I2S_CHANNEL_FMT_ALL_RIGHT;
+    i2s_config.channel_format = channels == EAudioChannels::LEFT_ONLY ? I2S_CHANNEL_FMT_ALL_LEFT :
+                                channels == EAudioChannels::RIGHT_ONLY ? I2S_CHANNEL_FMT_ALL_RIGHT :
+                                I2S_CHANNEL_FMT_RIGHT_LEFT;
     i2s_config.communication_format = static_cast<i2s_comm_format_t>(I2S_COMM_FORMAT_I2S_MSB);
     i2s_config.intr_alloc_flags = 0; //ESP_INTR_FLAG_LEVEL1;
     i2s_config.dma_buf_count = 8;
@@ -84,7 +87,9 @@ void AudioPlayer::begin()
         printf("error: %i\n", err);
     }
 //    i2s_set_pin(I2S_NUM_0, NULL);
-    i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN);
+    i2s_set_dac_mode( channels == EAudioChannels::LEFT_ONLY ? I2S_DAC_CHANNEL_LEFT_EN :
+                      channels == EAudioChannels::RIGHT_ONLY ? I2S_DAC_CHANNEL_RIGHT_EN :
+                      I2S_DAC_CHANNEL_BOTH_EN );
     i2s_set_sample_rates(I2S_NUM_0, m_frequency);
     i2s_zero_dma_buffer( I2S_NUM_0 );
     xSemaphoreGive( m_mutex );
