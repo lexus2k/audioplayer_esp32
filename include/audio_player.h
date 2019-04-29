@@ -33,6 +33,7 @@ public:
     ~AudioPlayer();
 
     void play(const NixieMelody* melody);
+    void play_vgm(const NixieMelody *melody);
     void play_vgm(const uint8_t *buffer, int size);
     void begin();
     void end();
