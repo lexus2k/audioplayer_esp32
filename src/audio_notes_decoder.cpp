@@ -108,14 +108,12 @@ bool AudioNotesDecoder::read_note_data()
                 break;
             }
             m_note_samples_left = m_rate / note.tempo;
-            if ( note.freq >= NOTE_LAST_CMD)
-            {
-                m_samples_per_period = m_rate / note.freq;
-            }
+            m_samples_per_period = (note.freq > NOTE_LAST_CMD) ? (m_rate / note.freq) : 100000;
+            m_pause_left = 0;
             result = true;
             if ( m_melody->pause < 0 )
             {
-                m_pause_left = m_rate * (m_note_samples_left  * (-m_melody->pause) / 32) / (1000);
+                m_pause_left = (m_note_samples_left  * (-m_melody->pause) / 32);
             }
             else if ( m_melody->pause > 0)
             {
@@ -131,14 +129,12 @@ bool AudioNotesDecoder::read_note_data()
                 break;
             }
             m_note_samples_left = (note.duration * m_rate) / 1000;
-            if ( note.freq > NOTE_LAST_CMD)
-            {
-                m_samples_per_period = m_rate / note.freq;
-            }
+            m_samples_per_period = (note.freq > NOTE_LAST_CMD) ? (m_rate / note.freq) : 100000;
+            m_pause_left = 0;
             result = true;
             if ( m_melody->pause < 0 )
             {
-                m_pause_left = m_rate * (note.duration * (-m_melody->pause) / 32) / (1000);
+                m_pause_left = m_note_samples_left * (-m_melody->pause) / 32;
             }
             else if ( m_melody->pause > 0)
             {
