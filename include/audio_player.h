@@ -49,7 +49,7 @@ public:
      * Return false, when nothing is played
      */
     bool update();
-    void set_prebuffering(int prebuffering_ms);
+    void set_prebuffering(uint32_t prebuffering_ms);
 
 private:
     AudioDecoder* m_decoder = nullptr;

@@ -107,13 +107,13 @@ void AudioPlayer::end()
     xSemaphoreGive( m_mutex );
 }
 
-void AudioPlayer::set_prebuffering(int prebuffering_ms)
+void AudioPlayer::set_prebuffering(uint32_t prebuffering_ms)
 {
     uint32_t bytes = m_frequency * prebuffering_ms / 1000 * 2 * 2;
     int i=5;
-    while ( bytes > (1<<i) ) i++;
-    // At least we need i2s buffer to hold audio data for preburreing_ms period
-    m_i2s_buffer_size = 1<<i;
+    while ( bytes > ( 1 << i) ) i++;
+    // At least we need i2s buffer to hold audio data for prebuffering_ms period
+    m_i2s_buffer_size = 1 << i;
     // We do not need large buffer for decoder
     m_decoder_buffer_size = m_i2s_buffer_size / 2;
 }

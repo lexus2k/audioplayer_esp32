@@ -27,12 +27,21 @@ static const uint16_t s_amplitude[16] =
     0xFFFF,0xEFFF,0x8000,0x8000,0x1000,0x0000,0x0000,0x0000,
 };
 
+enum
+{
+    STATE_READ_NOTE = 0,
+    STATE_PLAY_NOTE,
+    STATE_MAKE_PAUSE,
+    STATE_STOP,
+};
+
 void AudioNotesDecoder::set_melody( const NixieMelody* melody )
 {
     m_melody = melody;
     m_position = melody->notes;
     m_note_samples_left = 0;
     m_pause_left = 0;
+    m_state = STATE_READ_NOTE;
 }
 
 void AudioNotesDecoder::set_format(uint32_t rate, uint8_t bps)
@@ -49,46 +58,53 @@ int AudioNotesDecoder::decode(uint8_t* origin_buffer, int max_size)
     }
     uint8_t* buffer = origin_buffer;
     int remaining = max_size;
-    while ( remaining > 0 )
+    while ( remaining > 0 && m_state != STATE_STOP )
     {
-        if ( !m_note_samples_left && !m_pause_left )
+        switch (m_state)
         {
-            if (!read_note_data()) break;
-        }
-        while ( (m_note_samples_left > 0) && (remaining > 0) )
-        {
-            if ( m_samples_per_period )
-            {
-                uint16_t remainder = m_played_period % m_samples_per_period;
-                m_last_index = (16 * remainder / m_samples_per_period);
-            }
-             // RIGHT ???
-            *reinterpret_cast<uint16_t*>(buffer) = s_amplitude[m_last_index];
-            remaining -= (m_bps / 8);
-            buffer += (m_bps / 8);
-            // LEFT ???
-            *reinterpret_cast<uint16_t*>(buffer) = s_amplitude[m_last_index];
-            remaining -= (m_bps / 8);
-            buffer += (m_bps / 8);
-            m_note_samples_left--;
-            m_played_period++;
-        }
-        if ( m_note_samples_left == 0 )
-        {
-            while ( (m_pause_left > 0) && (remaining >0) )
-            {
+            case STATE_READ_NOTE:
+                m_state = read_note_data() == false ? STATE_STOP: STATE_PLAY_NOTE;
+                break;
+            case STATE_PLAY_NOTE:
+                if ( m_note_samples_left == 0 )
+                {
+                    m_state = STATE_MAKE_PAUSE;
+                }
+                if ( m_samples_per_period )
+                {
+                    uint16_t remainder = m_played_period % m_samples_per_period;
+                    m_last_index = (16 * remainder / m_samples_per_period);
+                }
+                // RIGHT ???
+                *reinterpret_cast<uint16_t*>(buffer) = s_amplitude[m_last_index];
+                remaining -= (m_bps / 8);
+                buffer += (m_bps / 8);
+                // LEFT ???
+                *reinterpret_cast<uint16_t*>(buffer) = s_amplitude[m_last_index];
+                remaining -= (m_bps / 8);
+                buffer += (m_bps / 8);
+
+                m_note_samples_left--;
+                m_played_period++;
+                break;
+            case STATE_MAKE_PAUSE:
+                if ( m_pause_left == 0 )
+                {
+                    next_note();
+                    m_state = STATE_READ_NOTE;
+                    break;
+                }
                 *reinterpret_cast<uint16_t*>(buffer) = s_amplitude[m_last_index];
                 remaining -= (m_bps / 8);
                 buffer += (m_bps / 8);
                 *reinterpret_cast<uint16_t*>(buffer) = s_amplitude[m_last_index];
                 remaining -= (m_bps / 8);
                 buffer += (m_bps / 8);
+
                 m_pause_left--;
-            }
-            if ( m_pause_left == 0 )
-            {
-                next_note();
-            }
+                break;
+            default:
+                break;
         }
     }
     return buffer - origin_buffer;
