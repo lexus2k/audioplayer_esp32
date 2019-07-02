@@ -21,10 +21,21 @@
 #include <stdio.h>
 #include <string.h>
 
+/*
 static const uint16_t s_amplitude[16] =
 {
     0x0000,0x1000,0x8000,0x8000,0xEFFF,0xFFFF,0xFFFF,0xFFFF,
     0xFFFF,0xEFFF,0x8000,0x8000,0x1000,0x0000,0x0000,0x0000,
+};
+*/
+
+#define WAVE_SAMPLES 16
+
+
+static const uint16_t s_amplitude[WAVE_SAMPLES] =
+{
+    0x0000,0x0000,0x0000,0x0000,0x8FFF,0x8FFF,0x8FFF,0x8FFF,
+    0x8FFF,0x8FFF,0x8FFF,0x8FFF,0x0000,0x0000,0x0000,0x0000,
 };
 
 enum
@@ -73,7 +84,7 @@ int AudioNotesDecoder::decode(uint8_t* origin_buffer, int max_size)
                 if ( m_samples_per_period )
                 {
                     uint16_t remainder = m_played_period % m_samples_per_period;
-                    m_last_index = (16 * remainder / m_samples_per_period);
+                    m_last_index = (WAVE_SAMPLES * remainder / m_samples_per_period);
                 }
                 // RIGHT ???
                 *reinterpret_cast<uint16_t*>(buffer) = s_amplitude[m_last_index];
@@ -113,20 +124,43 @@ int AudioNotesDecoder::decode(uint8_t* origin_buffer, int max_size)
 bool AudioNotesDecoder::read_note_data()
 {
     bool result = false;
+    uint16_t freq;
+
     m_samples_per_period = 0;
     switch ( m_melody->type )
     {
         case MELODY_TYPE_PROGMEM_TEMPO:
         {
             SNixieTempoNote note = *reinterpret_cast<const SNixieTempoNote*>(m_position);
+            freq = note.freq;
             if ( note.freq == NOTE_STOP )
             {
                 break;
             }
             m_note_samples_left = m_rate / note.tempo;
-            m_samples_per_period = (note.freq > NOTE_LAST_CMD) ? (m_rate / note.freq) : 100000;
-            m_pause_left = 0;
             result = true;
+            break;
+        }
+        case MELODY_TYPE_PROGMEM_SAMPLING:
+        {
+            SNixieSamplingNote note = *reinterpret_cast<const SNixieSamplingNote*>(m_position);
+            freq = note.freq;
+            if ( note.freq == NOTE_STOP )
+            {
+                break;
+            }
+            m_note_samples_left = ((uint32_t)note.duration * (uint32_t)m_rate) / 1000;
+            result = true;
+            break;
+        }
+        default:
+            break;
+    }
+    if ( result )
+    {
+        m_samples_per_period = (freq > NOTE_LAST_CMD) ? (m_rate / freq) : 100000;
+        {
+            m_pause_left = 0;
             if ( m_melody->pause < 0 )
             {
                 m_pause_left = (m_note_samples_left  * (-m_melody->pause) / 32);
@@ -135,38 +169,7 @@ bool AudioNotesDecoder::read_note_data()
             {
                 m_pause_left = m_rate * m_melody->pause / 1000;
             }
-            break;
-        }
-        case MELODY_TYPE_PROGMEM_SAMPLING:
-        {
-            SNixieSamplingNote note = *reinterpret_cast<const SNixieSamplingNote*>(m_position);
-            if ( note.freq == NOTE_STOP )
-            {
-                break;
-            }
-            m_note_samples_left = (note.duration * m_rate) / 1000;
-            m_samples_per_period = (note.freq > NOTE_LAST_CMD) ? (m_rate / note.freq) : 100000;
-            m_pause_left = 0;
-            result = true;
-            if ( m_melody->pause < 0 )
-            {
-                m_pause_left = m_note_samples_left * (-m_melody->pause) / 32;
-            }
-            else if ( m_melody->pause > 0)
-            {
-                m_pause_left = m_rate * m_melody->pause / 1000;
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    if ( result )
-    {
-        m_played_period = m_samples_per_period * m_last_index / 16;
-        if ( m_melody->pause > 0 )
-        {
-            m_pause_left = m_rate * m_melody->pause / 1000;
+            m_played_period = m_samples_per_period * m_last_index / WAVE_SAMPLES;
         }
     }
     return result;
