@@ -41,7 +41,7 @@ void AudioVgmDecoder::set_melody( const uint8_t *buffer, int size )
         vgm_play_stop();
         m_started = false;
     }
-    vgm_set_volume( 3.5f );
+//    vgm_set_volume( 3.5f );
     vgm_set_format(m_rate);
     vgm_play_start(buffer, size);
     m_started = true;
@@ -51,6 +51,11 @@ void AudioVgmDecoder::set_format(uint32_t rate, uint8_t bps)
 {
     m_rate = rate;
     m_bps = bps;
+}
+
+void AudioVgmDecoder::set_volume( float volume )
+{
+    vgm_set_volume( volume );
 }
 
 int AudioVgmDecoder::decode(uint8_t* origin_buffer, int max_size)

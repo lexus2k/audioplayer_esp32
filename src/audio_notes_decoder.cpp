@@ -20,23 +20,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
-/*
-static const uint16_t s_amplitude[16] =
-{
-    0x0000,0x1000,0x8000,0x8000,0xEFFF,0xFFFF,0xFFFF,0xFFFF,
-    0xFFFF,0xEFFF,0x8000,0x8000,0x1000,0x0000,0x0000,0x0000,
-};
-*/
 
 #define WAVE_SAMPLES (16)
 
+static uint16_t s_amplitude[WAVE_SAMPLES] =
+{
+    0x0000,0x1000,0x6000,0xA000,0xEFFF,0xFFFF,0xFFFF,0xFFFF,
+    0xFFFF,0xEFFF,0xA000,0x6000,0x1000,0x0000,0x0000,0x0000,
+};
 
+/*
 static const uint16_t s_amplitude[WAVE_SAMPLES] =
 {
     0x0000,0x0000,0x0000,0x0000,0x8FFF,0x8FFF,0x8FFF,0x8FFF,
     0x8FFF,0x8FFF,0x8FFF,0x8FFF,0x0000,0x0000,0x0000,0x0000,
 };
+*/
 
 enum
 {
@@ -52,6 +53,7 @@ void AudioNotesDecoder::set_melody( const NixieMelody* melody )
     m_position = melody->notes;
     m_note_samples_left = 0;
     m_pause_left = 0;
+//    set_volume( 0.3 );
     m_state = STATE_READ_NOTE;
 }
 
@@ -59,6 +61,18 @@ void AudioNotesDecoder::set_format(uint32_t rate, uint8_t bps)
 {
     m_rate = rate;
     m_bps = bps;
+}
+
+void AudioNotesDecoder::set_volume( float volume )
+{
+    uint32_t middle = (1 << (m_bps - 1)) - 1;
+    for(int i=0; i<WAVE_SAMPLES; i++)
+    {
+        float amp = middle + middle*volume*sin(2 * i * M_PI / WAVE_SAMPLES );
+        if (amp < 0 ) amp = 0;
+        if (amp > middle*2) amp = middle*2;
+        s_amplitude[i] = amp;
+    }
 }
 
 int AudioNotesDecoder::decode(uint8_t* origin_buffer, int max_size)

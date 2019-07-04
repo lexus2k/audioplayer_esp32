@@ -129,6 +129,7 @@ void AudioPlayer::play(const NixieMelody* melody)
     // TODO get format from m_output
     decoder->set_format(m_frequency, 16);
     decoder->set_melody( melody );
+    decoder->set_volume( m_volume );
     m_decoder = decoder;
     reset_player();
     xSemaphoreGive( m_mutex );
@@ -154,6 +155,7 @@ void AudioPlayer::play_vgm(const uint8_t *buffer, int size)
     // TODO get format from m_output
     decoder->set_format( m_frequency, 16 );
     decoder->set_melody( buffer, size );
+    decoder->set_volume( m_volume );
     reset_player();
     xSemaphoreGive( m_mutex );
 }
@@ -161,6 +163,17 @@ void AudioPlayer::play_vgm(const uint8_t *buffer, int size)
 void AudioPlayer::play_vgm(const NixieMelody *melody)
 {
     play_vgm( melody->notes, melody->data_len );
+}
+
+void AudioPlayer::set_volume( float volume )
+{
+    xSemaphoreTake( m_mutex, portMAX_DELAY );
+    m_volume = volume;
+    if ( m_decoder )
+    {
+        m_decoder->set_volume( m_volume );
+    }
+    xSemaphoreGive( m_mutex );
 }
 
 int AudioPlayer::reset_player()

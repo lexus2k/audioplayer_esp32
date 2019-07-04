@@ -26,5 +26,9 @@ public:
     AudioDecoder() = default;
     virtual ~AudioDecoder() = default;
     virtual int decode(uint8_t* buffer, int max_size) = 0;
+    /**
+     * volume = 1.0 normal,
+     */
+    virtual void set_volume(float volume) = 0;
 };
 

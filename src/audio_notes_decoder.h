@@ -30,6 +30,7 @@ public:
 
     void set_format(uint32_t rate, uint8_t bps);
     void set_melody( const NixieMelody* melody );
+    void set_volume( float volume ) override;
 
     int decode(uint8_t* buffer, int max_size) override;
 

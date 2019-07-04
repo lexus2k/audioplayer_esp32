@@ -42,6 +42,7 @@ public:
     void play(const NixieMelody* melody);
     void play_vgm(const NixieMelody *melody);
     void play_vgm(const uint8_t *buffer, int size);
+    void set_volume( float volume );
     void begin(EAudioChannels channels = EAudioChannels::BOTH);
     void end();
     void set_on_play_complete( void (*cb)() = nullptr ) { m_on_play_complete = cb; }
@@ -54,6 +55,7 @@ public:
 private:
     AudioDecoder* m_decoder = nullptr;
     void (*m_on_play_complete)() = nullptr;
+    float m_volume = 1.0f;
     uint32_t m_frequency = 16000;
     uint8_t* m_buffer = nullptr;
     uint32_t m_i2s_buffer_size = 512;
