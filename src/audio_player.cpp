@@ -154,8 +154,8 @@ void AudioPlayer::play_vgm(const uint8_t *buffer, int size)
     }
     // TODO get format from m_output
     decoder->set_format( m_frequency, 16 );
-    decoder->set_melody( buffer, size );
     decoder->set_volume( m_volume );
+    decoder->set_melody( buffer, size );
     reset_player();
     xSemaphoreGive( m_mutex );
 }
