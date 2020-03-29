@@ -1,6 +1,6 @@
 /*
     This file is part of I2S audio player for ESP32.
-    Copyright (C) 2019 Alexey Dynda.
+    Copyright (C) 2019-2020 Alexey Dynda.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -163,6 +163,18 @@ void AudioPlayer::play_vgm(const uint8_t *buffer, int size)
 void AudioPlayer::play_vgm(const NixieMelody *melody)
 {
     play_vgm( melody->notes, melody->data_len );
+}
+
+void AudioPlayer::stop()
+{
+    xSemaphoreTake( m_mutex, portMAX_DELAY );
+    if (m_decoder != nullptr)
+    {
+        delete m_decoder;
+    }
+    m_decoder = nullptr;
+//    reset_player();
+    xSemaphoreGive( m_mutex );
 }
 
 void AudioPlayer::set_volume( float volume )
