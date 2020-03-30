@@ -165,6 +165,14 @@ void AudioPlayer::play_vgm(const NixieMelody *melody)
     play_vgm( melody->notes, melody->data_len );
 }
 
+bool AudioPlayer::is_playing()
+{
+    xSemaphoreTake( m_mutex, portMAX_DELAY );
+    bool result = m_decoder != nullptr;
+    xSemaphoreGive( m_mutex );
+    return result;
+}
+
 void AudioPlayer::stop()
 {
     xSemaphoreTake( m_mutex, portMAX_DELAY );

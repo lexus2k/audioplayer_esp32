@@ -47,6 +47,7 @@ public:
     void begin(EAudioChannels channels = EAudioChannels::BOTH);
     void end();
     void set_on_play_complete( void (*cb)() = nullptr ) { m_on_play_complete = cb; }
+    bool is_playing();
     /**
      * Return false, when nothing is played
      */
