@@ -168,6 +168,7 @@ void AudioPlayer::play_vgm(const NixieMelody *melody)
 void AudioPlayer::stop()
 {
     xSemaphoreTake( m_mutex, portMAX_DELAY );
+    write_i2s_data( nullptr, 0 );
     if (m_decoder != nullptr)
     {
         delete m_decoder;
