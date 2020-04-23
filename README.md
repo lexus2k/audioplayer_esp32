@@ -1,6 +1,11 @@
 # audioplayer_esp32
 Audio I2S player for ESP32
 
+To use vgm files please, download this library also: https://github.com/lexus2k/vgm_decoder
+AudioPlayer needs it to play vgm files
+
+Demo with playing vgm files on ESP32 is here: https://github.com/lexus2k/vgm_test
+
 ## Easy to use
 
 Example
