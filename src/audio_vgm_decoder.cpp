@@ -1,6 +1,6 @@
 /*
     This file is part of I2S audio player for ESP32.
-    Copyright (C) 2019  Alexey Dynda.
+    Copyright (C) 2019-2020  Alexey Dynda.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,21 +29,15 @@ AudioVgmDecoder::~AudioVgmDecoder()
 {
     if ( m_started )
     {
-        vgm_play_stop();
+//        m_vgm.close;
         m_started = false;
     }
 }
 
 void AudioVgmDecoder::set_melody( const uint8_t *buffer, int size )
 {
-    if ( m_started )
-    {
-        vgm_play_stop();
-        m_started = false;
-    }
-//    vgm_set_volume( 3.5f );
-    vgm_set_format(m_rate);
-    vgm_play_start(buffer, size);
+    m_vgm.setSampleFrequency(m_rate);
+    m_vgm.open( buffer, size );
     m_started = true;
 }
 
@@ -55,15 +49,16 @@ void AudioVgmDecoder::set_format(uint32_t rate, uint8_t bps)
 
 void AudioVgmDecoder::set_volume( float volume )
 {
-    vgm_set_volume( volume );
+    m_vgm.setVolume( static_cast<uint8_t>(volume * 64) );
 }
 
 int AudioVgmDecoder::decode(uint8_t* origin_buffer, int max_size)
 {
-    int size = vgm_play_data(origin_buffer, max_size);
+    int size = m_vgm.decodePcm(origin_buffer, max_size);
+    if ( size < 0 ) return 0;
     if ( size == 0 )
     {
-        vgm_play_stop();
+//        m_vgm.close();
         m_started = false;
     }
     return size;

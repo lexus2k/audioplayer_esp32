@@ -1,6 +1,6 @@
 /*
     This file is part of I2S audio player for ESP32.
-    Copyright (C) 2019  Alexey Dynda.
+    Copyright (C) 2019-2020  Alexey Dynda.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 
 #ifdef USE_VGM_DECODER
 
+#include "vgm_file.h"
+
 class AudioVgmDecoder: public AudioDecoder
 {
 public:
@@ -37,6 +39,7 @@ private:
     uint32_t m_rate = 16000;
     uint8_t m_bps = 16;
     bool m_started = false;
+    VgmFile m_vgm;
 };
 
 #endif
