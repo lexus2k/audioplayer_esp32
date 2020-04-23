@@ -23,8 +23,6 @@
 
 #ifdef USE_VGM_DECODER
 
-#include "esp32_vgmplay.h"
-
 AudioVgmDecoder::~AudioVgmDecoder()
 {
     if ( m_started )
