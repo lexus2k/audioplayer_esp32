@@ -1443,6 +1443,7 @@ const NixieMelody  melodyMario = {
     .data_len = sizeof(marioNotes),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1451,6 +1452,7 @@ const NixieMelody  melodyMario2 = {
     .data_len = sizeof(marioNotes2),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 50,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1459,6 +1461,7 @@ const NixieMelody  melodyMarioUnderground = {
     .data_len = sizeof(underworld_notes),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1467,6 +1470,7 @@ const NixieMelody  melodyStarwars = {
     .data_len = sizeof(imperialMarch),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1475,6 +1479,7 @@ const NixieMelody  melodyMonkeyIsland = {
     .data_len = sizeof(monkeyIsland),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 10,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1483,6 +1488,7 @@ const NixieMelody  melodyMonkeyIslandP = {
     .data_len = sizeof(monkeyIslandP),
     .type = MELODY_TYPE_PROGMEM_SAMPLING,
     .pause = -3, // negative value means that pause = note_duration * Value / 32
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1497,6 +1503,7 @@ const NixieMelody soundCancel = {
     .data_len = sizeof(cancelNotes),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1510,6 +1517,7 @@ const NixieMelody soundClick = {
     .data_len = sizeof(clickNotes),
     .type = MELODY_TYPE_PROGMEM_SAMPLING,
     .pause = 30,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1523,6 +1531,7 @@ const NixieMelody soundOk = {
     .data_len = sizeof(okNotes),
     .type = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1544,6 +1553,7 @@ const NixieMelody doorBell = {
     .data_len = sizeof(doorBellNotes),
     .type = MELODY_TYPE_PROGMEM_SAMPLING,
     .pause = 5,
+    .customData = 0,
     .name = nullptr,
 };
 
@@ -1552,5 +1562,6 @@ const NixieMelody soundClock = {
     .data_len = sizeof(timeChange1),
     .type  = MELODY_TYPE_PROGMEM_TEMPO,
     .pause = 30,
+    .customData = 0,
     .name = nullptr,
 };

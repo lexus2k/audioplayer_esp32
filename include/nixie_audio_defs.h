@@ -188,11 +188,11 @@ typedef struct
      * pause in milliseconds between playing notes
      * or if negative - defines pause between note in % of note duration (in 1/32 units).
      */
-    union
-    {
-        int16_t        pause;
-        uint16_t       customData;
-    };
+    int16_t        pause;
+    /**
+     * Custom field
+     */
+    uint16_t       customData;
     /**
      * Melody name optional. Can be null
      */
