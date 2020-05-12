@@ -27,7 +27,7 @@ AudioVgmDecoder::~AudioVgmDecoder()
 {
     if ( m_started )
     {
-        m_vgm.close;
+        m_vgm.close();
         m_started = false;
     }
 }
