@@ -27,7 +27,7 @@ AudioVgmDecoder::~AudioVgmDecoder()
 {
     if ( m_started )
     {
-//        m_vgm.close;
+        m_vgm.close;
         m_started = false;
     }
 }
@@ -56,7 +56,7 @@ int AudioVgmDecoder::decode(uint8_t* origin_buffer, int max_size)
     if ( size < 0 ) return 0;
     if ( size == 0 )
     {
-//        m_vgm.close();
+        m_vgm.close();
         m_started = false;
     }
     return size;
