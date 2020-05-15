@@ -118,7 +118,7 @@ void AudioPlayer::set_prebuffering(uint32_t prebuffering_ms)
     m_decoder_buffer_size = m_i2s_buffer_size / 2;
 }
 
-void AudioPlayer::play(const NixieMelody* melody)
+void AudioPlayer::play_notes(const NixieMelody* melody)
 {
     xSemaphoreTake( m_mutex, portMAX_DELAY );
     if (m_decoder != nullptr)
@@ -135,7 +135,17 @@ void AudioPlayer::play(const NixieMelody* melody)
     xSemaphoreGive( m_mutex );
 }
 
-void AudioPlayer::play_vgm(const uint8_t *buffer, int size)
+void AudioPlayer::play(const NixieMelody *melody)
+{
+    switch (melody->type)
+    {
+        case MELODY_TYPE_VGM: play_vgm(melody); break;
+        case MELODY_TYPE_NSF: play_nsf(melody); break;
+        default: play_notes(melody); break;
+    }
+}
+
+void AudioPlayer::play_vgm(const NixieMelody *melody)
 {
     xSemaphoreTake( m_mutex, portMAX_DELAY );
     if (m_decoder != nullptr)
@@ -155,14 +165,36 @@ void AudioPlayer::play_vgm(const uint8_t *buffer, int size)
     // TODO get format from m_output
     decoder->set_format( m_frequency, 16 );
     decoder->set_volume( m_volume );
-    decoder->set_melody( buffer, size );
+    decoder->set_melody( melody->notes, melody->data_len );
+    decoder->set_duration( melody->duration );
     reset_player();
     xSemaphoreGive( m_mutex );
 }
 
-void AudioPlayer::play_vgm(const NixieMelody *melody)
+void AudioPlayer::play_nsf(const NixieMelody *melody)
 {
-    play_vgm( melody->notes, melody->data_len );
+    xSemaphoreTake( m_mutex, portMAX_DELAY );
+    if (m_decoder != nullptr)
+    {
+        delete m_decoder;
+    }
+#if   defined(USE_GME_DECODER)
+    AudioGmeDecoder* decoder = new AudioGmeDecoder();
+#elif defined(USE_VGM_DECODER)
+    AudioVgmDecoder* decoder = new AudioVgmDecoder();
+#endif
+    m_decoder = decoder;
+    if (m_decoder == nullptr )
+    {
+        return;
+    }
+    // TODO get format from m_output
+    decoder->set_format( m_frequency, 16 );
+    decoder->set_volume( m_volume );
+    decoder->set_melody( melody->notes, melody->data_len );
+    decoder->set_duration( melody->duration );
+    reset_player();
+    xSemaphoreGive( m_mutex );
 }
 
 bool AudioPlayer::is_playing()

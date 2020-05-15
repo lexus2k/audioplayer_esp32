@@ -19,7 +19,6 @@
 #pragma once
 
 #include "nixie_audio_defs.h"
-#include "audio_decoder.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
@@ -33,25 +32,47 @@ enum class EAudioChannels: uint8_t
     BOTH = 0x01 | 0x02,
 };
 
+class AudioDecoder;
+
 class AudioPlayer
 {
 public:
     AudioPlayer(uint32_t frequency = 16000);
     ~AudioPlayer();
 
+    /**
+     * Starts playing of specified melody.
+     * You should call update() method in the loop until it returns false.
+     */
     void play(const NixieMelody* melody);
-    void play_vgm(const NixieMelody *melody);
-    void play_vgm(const uint8_t *buffer, int size);
+
+    /** Interrupts playing of current melody */
     void stop();
+
+    /** Changes volume for the melody */
     void set_volume( float volume );
+
+    /** Initializes ESP I2S hardware */
     void begin(EAudioChannels channels = EAudioChannels::BOTH);
+
+    /** Frees ESP hardware */
     void end();
+
+    /** Set callback to be used on play completion */
     void set_on_play_complete( void (*cb)() = nullptr ) { m_on_play_complete = cb; }
+
+    /** Returns true if melody is playing */
     bool is_playing();
+
     /**
      * Return false, when nothing is played
      */
     bool update();
+
+    /**
+     * Set prebuffering for melody decoder in milliseconds. update() method must be called
+     * at least each  prebuffering_ms milliseconds.
+     */
     void set_prebuffering(uint32_t prebuffering_ms);
 
 private:
@@ -70,4 +91,8 @@ private:
     int reset_player();
     int decode_data();
     int play_data();
+
+    void play_notes(const NixieMelody *melody);
+    void play_vgm(const NixieMelody *melody);
+    void play_nsf(const NixieMelody *melody);
 };

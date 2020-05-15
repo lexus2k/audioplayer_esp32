@@ -24,11 +24,18 @@ class AudioDecoder
 {
 public:
     AudioDecoder() = default;
+
     virtual ~AudioDecoder() = default;
+
     virtual int decode(uint8_t* buffer, int max_size) = 0;
+
     /**
      * volume = 1.0 normal,
      */
-    virtual void set_volume(float volume) = 0;
+    virtual void set_volume(float volume) {};
+
+    virtual void set_duration(uint32_t milliseconds) {}
+
+    virtual void set_track(int track) {}
 };
 

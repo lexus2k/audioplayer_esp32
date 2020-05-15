@@ -50,6 +50,16 @@ void AudioVgmDecoder::set_volume( float volume )
     m_vgm.setVolume( static_cast<uint8_t>(volume * 64) );
 }
 
+void AudioVgmDecoder::set_duration(uint32_t duration_ms)
+{
+    m_vgm.setMaxDuration( duration_ms );
+}
+
+void AudioVgmDecoder::set_track(int track)
+{
+    m_vgm.setTrack( track );
+}
+
 int AudioVgmDecoder::decode(uint8_t* origin_buffer, int max_size)
 {
     int size = m_vgm.decodePcm(origin_buffer, max_size);
