@@ -164,9 +164,9 @@ void AudioPlayer::play_vgm(const NixieMelody *melody)
     }
     // TODO get format from m_output
     decoder->set_format( m_frequency, 16 );
-    decoder->set_volume( m_volume );
     decoder->set_melody( melody->notes, melody->data_len );
     decoder->set_duration( melody->duration );
+    decoder->set_volume( m_volume );
     reset_player();
     xSemaphoreGive( m_mutex );
 }
@@ -190,10 +190,10 @@ void AudioPlayer::play_nsf(const NixieMelody *melody)
     }
     // TODO get format from m_output
     decoder->set_format( m_frequency, 16 );
-    decoder->set_volume( m_volume );
     decoder->set_melody( melody->notes, melody->data_len );
     decoder->set_duration( melody->duration );
     decoder->set_track( melody->track );
+    decoder->set_volume( m_volume );
     reset_player();
     xSemaphoreGive( m_mutex );
 }
