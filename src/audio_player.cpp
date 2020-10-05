@@ -193,7 +193,7 @@ void AudioPlayer::play_nsf(const NixieMelody *melody)
     decoder->set_melody( melody->notes, melody->data_len );
     decoder->set_duration( melody->duration );
     decoder->set_track( melody->track );
-    decoder->set_volume( m_volume );
+    m_decoder->set_volume( m_volume );
     reset_player();
     xSemaphoreGive( m_mutex );
 }
