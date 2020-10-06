@@ -52,7 +52,7 @@ void AudioVgmDecoder::set_format(uint32_t rate, uint8_t bps)
 
 void AudioVgmDecoder::set_volume( float volume )
 {
-    m_volume = static_cast<uint16_t>(m_volume * 64.0f);
+    m_volume = static_cast<uint16_t>(volume * 64.0f);
     m_vgm.setVolume( m_volume );
 }
 
