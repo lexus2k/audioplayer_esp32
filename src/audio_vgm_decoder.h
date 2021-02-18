@@ -41,7 +41,7 @@ private:
     uint32_t m_rate = 16000;
     uint8_t m_bps = 16;
     bool m_started = false;
-    uint16_t m_volume = 64;
+    uint16_t m_volume = 100;
     VgmFile m_vgm;
 };
 

@@ -36,7 +36,7 @@ void AudioVgmDecoder::set_melody( const uint8_t *buffer, int size )
 {
     m_vgm.setSampleFrequency(m_rate);
     m_vgm.open( buffer, size );
-    if ( m_volume != 64 )
+    if ( m_volume != 100 )
     {
         m_vgm.setVolume( m_volume );
     }
@@ -52,7 +52,7 @@ void AudioVgmDecoder::set_format(uint32_t rate, uint8_t bps)
 
 void AudioVgmDecoder::set_volume( float volume )
 {
-    m_volume = static_cast<uint16_t>(volume * 64.0f);
+    m_volume = static_cast<uint16_t>(volume * 100.0f);
     m_vgm.setVolume( m_volume );
 }
 
