@@ -20,6 +20,8 @@ static void main_task(void *pvParameter)
 {
     /* set prebuffering in milliseconds. It is required, when thread sleeps */
     audio_player.set_prebuffering( 50 );
+    // Use audio_player.begin(EAudioChannels::BOTH, false) to use with external I2S decoder
+    // Use audio_player.begin(EAudioChannels::BOTH, true) or audio_player.begin() to use with internal built-in I2S DAC decoder
     audio_player.begin();
     audio_player.play( &melodyMonkeyIslandP );
 
