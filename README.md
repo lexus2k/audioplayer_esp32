@@ -18,7 +18,7 @@ AudioPlayer audio_player( 16000 );
 
 static void main_task(void *pvParameter)
 {
-    /* set prebuffering in milliseconds. It is require, when thread sleeps */
+    /* set prebuffering in milliseconds. It is required, when thread sleeps */
     audio_player.set_prebuffering( 50 );
     audio_player.begin();
     audio_player.play( &melodyMonkeyIslandP );
