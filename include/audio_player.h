@@ -53,7 +53,7 @@ public:
     void set_volume( float volume );
 
     /** Initializes ESP I2S hardware */
-    void begin(EAudioChannels channels = EAudioChannels::BOTH);
+    void begin(EAudioChannels channels = EAudioChannels::BOTH, bool useBuiltinDac = true);
 
     /** Frees ESP hardware */
     void end();
